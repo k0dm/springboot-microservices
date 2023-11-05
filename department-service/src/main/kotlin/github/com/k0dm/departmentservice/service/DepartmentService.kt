@@ -2,6 +2,7 @@ package github.com.k0dm.departmentservice.service
 
 import github.com.k0dm.departmentservice.dto.DepartmentDto
 import github.com.k0dm.departmentservice.entity.Department
+import github.com.k0dm.departmentservice.exception.ResourceNotFoundException
 import github.com.k0dm.departmentservice.mapper.DepartmentMapper
 import github.com.k0dm.departmentservice.repository.DepartmentRepository
 import org.mapstruct.factory.Mappers
@@ -28,11 +29,17 @@ interface DepartmentService {
         }
 
         override fun getDepartmentById(id: Long): DepartmentDto {
-            return mapper.toDepartmentDto(departmentRepository.findById(id).get())
+            val department = departmentRepository.findById(id).orElseThrow {
+                throw ResourceNotFoundException("Department", "id", id)
+            }
+            return mapper.toDepartmentDto(department)
         }
 
         override fun getDepartmentByCode(code: String): DepartmentDto {
-            return mapper.toDepartmentDto(departmentRepository.findByDepartmentCode(code))
+            val department = departmentRepository.findByDepartmentCode(code).orElseThrow {
+                throw ResourceNotFoundException("Department", "code", code)
+            }
+            return mapper.toDepartmentDto(department)
         }
 
         override fun getAllDepartments(): List<DepartmentDto> {
