@@ -1,6 +1,5 @@
 package github.com.k0dm.employeeservice.entity
 
-import github.com.k0dm.employeeservice.dto.EmployeeDto
 import jakarta.persistence.*
 
 @Entity
@@ -13,6 +12,4 @@ data class Employee(
     var lastName: String,
     @Column(unique = true)
     var email: String
-) {
-    constructor(employeeDto: EmployeeDto) : this(employeeDto.id, employeeDto.firstName!!, employeeDto.lastName!!, employeeDto.email!!)
-}
+)
