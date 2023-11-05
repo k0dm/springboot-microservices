@@ -2,7 +2,10 @@ package github.com.k0dm.departmentservice.service
 
 import github.com.k0dm.departmentservice.dto.DepartmentDto
 import github.com.k0dm.departmentservice.entity.Department
+import github.com.k0dm.departmentservice.mapper.DepartmentMapper
 import github.com.k0dm.departmentservice.repository.DepartmentRepository
+import org.mapstruct.factory.Mappers
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 interface DepartmentService {
@@ -18,20 +21,22 @@ interface DepartmentService {
     @Service
     class Base(private val departmentRepository: DepartmentRepository) : DepartmentService {
 
+        private val mapper = Mappers.getMapper(DepartmentMapper::class.java)
+
         override fun saveDepartment(departmentDto: DepartmentDto): DepartmentDto {
-            return DepartmentDto(departmentRepository.save(Department(departmentDto)))
+            return mapper.toDepartmentDto(departmentRepository.save(mapper.toDepartment(departmentDto)))
         }
 
         override fun getDepartmentById(id: Long): DepartmentDto {
-            return DepartmentDto(departmentRepository.findById(id).get())
+            return mapper.toDepartmentDto(departmentRepository.findById(id).get())
         }
 
         override fun getDepartmentByCode(code: String): DepartmentDto {
-            return DepartmentDto(departmentRepository.findByDepartmentCode(code))
+            return mapper.toDepartmentDto(departmentRepository.findByDepartmentCode(code))
         }
 
         override fun getAllDepartments(): List<DepartmentDto> {
-            return departmentRepository.findAll().map { DepartmentDto(it) }
+            return departmentRepository.findAll().map { mapper.toDepartmentDto(it) }
         }
     }
 }

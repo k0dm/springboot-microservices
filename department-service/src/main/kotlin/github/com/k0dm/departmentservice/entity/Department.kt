@@ -8,15 +8,8 @@ import jakarta.persistence.*
 data class Department(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long?,
-    var departmentName: String,
-    var departmentDescription: String,
-    var departmentCode: String,
-) {
-    constructor(departmentDto: DepartmentDto) : this(
-        null,
-        departmentDto.departmentName!!,
-        departmentDto.departmentDescription!!,
-        departmentDto.departmentCode!!
-    )
-}
+    var id: Long? = 0,
+    var departmentName: String = "",
+    var departmentDescription: String = "",
+    var departmentCode: String = "",
+)
