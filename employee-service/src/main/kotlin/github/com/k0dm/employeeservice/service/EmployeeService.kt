@@ -1,7 +1,6 @@
 package github.com.k0dm.employeeservice.service
 
 import github.com.k0dm.employeeservice.dto.APIResponseDto
-import github.com.k0dm.employeeservice.dto.DepartmentDto
 import github.com.k0dm.employeeservice.dto.EmployeeDto
 import github.com.k0dm.employeeservice.entity.Employee
 import github.com.k0dm.employeeservice.exception.EmailAlreadyExistsException
@@ -9,8 +8,6 @@ import github.com.k0dm.employeeservice.exception.ResourceNotFoundException
 import github.com.k0dm.employeeservice.repository.EmployeeRepository
 import org.modelmapper.ModelMapper
 import org.springframework.stereotype.Service
-import org.springframework.web.client.RestTemplate
-import org.springframework.web.reactive.function.client.WebClient
 
 interface EmployeeService {
 
@@ -26,7 +23,7 @@ interface EmployeeService {
     class Base(
         private val repository: EmployeeRepository,
         private val modelMapper: ModelMapper,
-        private val webClient: WebClient
+        private val apiClient: APIClient
     ) : EmployeeService {
 
         override fun createEmployee(employeeDto: EmployeeDto): EmployeeDto {
@@ -47,14 +44,9 @@ interface EmployeeService {
                 throw ResourceNotFoundException("Employee", "id", id)
             }
             val employeeDto = modelMapper.map(employee, EmployeeDto::class.java)
+            val departmentDto = apiClient.getDepartmentByCode(employee.departmentCode)
 
-            val departmentDto = webClient.get()
-                .uri("http://localhost:8080/api/departments/byCode/" + employee.departmentCode)
-                .retrieve()
-                .bodyToMono(DepartmentDto::class.java)
-                .block()
-
-            return APIResponseDto(employeeDto, departmentDto!!)
+            return APIResponseDto(employeeDto, departmentDto)
         }
 
 
