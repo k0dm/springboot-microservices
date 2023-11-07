@@ -1,6 +1,5 @@
 package github.com.k0dm.departmentservice.entity
 
-import github.com.k0dm.departmentservice.dto.DepartmentDto
 import jakarta.persistence.*
 
 @Entity

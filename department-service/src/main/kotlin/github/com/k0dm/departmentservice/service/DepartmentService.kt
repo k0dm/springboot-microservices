@@ -1,12 +1,10 @@
 package github.com.k0dm.departmentservice.service
 
 import github.com.k0dm.departmentservice.dto.DepartmentDto
-import github.com.k0dm.departmentservice.entity.Department
 import github.com.k0dm.departmentservice.exception.ResourceNotFoundException
 import github.com.k0dm.departmentservice.mapper.DepartmentMapper
 import github.com.k0dm.departmentservice.repository.DepartmentRepository
 import org.mapstruct.factory.Mappers
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 interface DepartmentService {
