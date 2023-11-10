@@ -5,5 +5,6 @@ data class EmployeeDto(
     var firstName: String? = null,
     var lastName: String? = null,
     var email: String? = null,
-    var departmentCode: String? = null
+    var departmentCode: String? = null,
+    var organizationCode: String? = null
 )

@@ -3,6 +3,7 @@ package github.com.k0dm.employeeservice.service
 import github.com.k0dm.employeeservice.dto.APIResponseDto
 import github.com.k0dm.employeeservice.dto.DepartmentDto
 import github.com.k0dm.employeeservice.dto.EmployeeDto
+import github.com.k0dm.employeeservice.dto.OrganizationDto
 import github.com.k0dm.employeeservice.entity.Employee
 import github.com.k0dm.employeeservice.exception.EmailAlreadyExistsException
 import github.com.k0dm.employeeservice.exception.ResourceNotFoundException
@@ -13,6 +14,7 @@ import org.modelmapper.ModelMapper
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.bodyToMono
 
 interface EmployeeService {
 
@@ -64,7 +66,13 @@ interface EmployeeService {
                 .bodyToMono(DepartmentDto::class.java)
                 .block()!!
 
-            return APIResponseDto(employeeDto, departmentDto)
+           val organizationDto = webClient.get()
+               .uri("http://localhost:8082/api/organizations/"+employee.organizationCode)
+               .retrieve()
+               .bodyToMono(OrganizationDto::class.java)
+               .block()!!
+
+            return APIResponseDto(employeeDto, departmentDto, organizationDto)
         }
 
         override fun getDefaultDepartment(id: Long, e: Exception): APIResponseDto {
@@ -82,7 +90,14 @@ interface EmployeeService {
                 "RD001"
             )
 
-            return APIResponseDto(employeeDto, departmentDto)
+            val organizationDto = OrganizationDto(
+                null,
+                "R&D ORG",
+                "r and d organization",
+                "ORG001"
+            )
+
+            return APIResponseDto(employeeDto, departmentDto,organizationDto)
         }
 
 

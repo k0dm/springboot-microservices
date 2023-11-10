@@ -12,5 +12,6 @@ data class Employee(
     var lastName: String,
     @Column(unique = true)
     var email: String,
-    var departmentCode: String
+    var departmentCode: String,
+    var organizationCode: String
 )
