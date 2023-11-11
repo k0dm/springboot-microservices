@@ -26,5 +26,4 @@ class EmployeeController {
 
     @GetMapping()
     fun getAllEmployees() = ResponseEntity.ok(service.getAllEmployees())
-
 }
